@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-6 offset-md-3 border rounded p-3"
             style="background-color: white !important; margin-top:23vh;.">
-            <form action="{{ route('user.update', Auth::id()) }}" method="POST">
+            <form action="{{ route('user.update', Auth::user()->id ) }}" method="POST">
                 @csrf
                 <div class="mb-3">
                     <label class="form-label">Filas</label>
@@ -13,7 +13,8 @@
                         @foreach ($queues as $queue)
                         <div class="col-6 @error('queues_array') is-invalid @enderror">
                             <input class="form-check-input" type="checkbox" value="{{ $queue->id }}"
-                                id="{{ $queue->name }}" name="queues_array[]" @if($user->queues->contains($queue->id))
+                                id="{{ $queue->name }}" name="queues_array[]"
+                                @if($attendant->queues->contains($queue->id))
                             checked
                             @endif>
                             <label class="form-check-label" for="{{ $queue->name }}">
@@ -33,7 +34,8 @@
                 <div class="mb-3">
                     <label for="table_number" class="form-label">Guichê</label>
                     <input type="number" class="form-control @error('table_number') is-invalid @enderror"
-                        id="table_number" value="{{ isset($user) ? $user->table_number : old('table_number') }}"
+                        id="table_number"
+                        value="{{ isset($attendant) ? $attendant->table_number : old('table_number') }}"
                         name="table_number" required>
                 </div>
                 <div class="d-flex justify-content-end">

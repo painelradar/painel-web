@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('stringNumber');
             $table->string('queue');
             $table->integer('queue_id');
+            $table->unsignedBigInteger('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->string('table_number');
             $table->timestamps();
         });

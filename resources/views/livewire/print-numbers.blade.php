@@ -11,10 +11,10 @@
                 <div class="card border-0 align-items-center text-bg-light"
                     style="max-width: 1200x; --bs-bg-opacity: .0 !important;">
                     <div class="card-body">
-                        <form wire:submit.prevent="createNumber({{ $queue->id }},{{Auth::user()->coop}}, {{Auth::user()->pa}})">
+                        <form wire:submit.prevent="render">
                             <button type="submit" id="{{ $queue->id }}" class="btn btn-light"
                                 style="height:150px;width:500px; font-size: 2rem !important; font-weight: 700; color: #003641; border: 4px solid #003641;"
-                                onclick="clickButton('{{ $queue->name}}', '{{ $queue->printNumber(Request::segment(2), Request::segment(3)) }}')">{{
+                                onclick="buttons[{{ $queue->id }}]()">{{
                                 $queue->name
                                 }}</button>
                         </form>
@@ -70,5 +70,20 @@
             </div>
         </div>
     </div>
+    <script>
+        buttons = {
+            @foreach ($queues as $queue)
+                {{ $queue->id }}(){
 
+                    $.get("{{ route('panel.print', $queue->id) }}", function(senha) {
+                        printNumber('{{ $queue->name }}', senha);
+                    });
+                    setTimeout(function() {
+                        $('#showPrintLoading').modal('hide');
+                    }, 3000);
+                },
+            @endforeach
+        }
+
+    </script>
 </div>

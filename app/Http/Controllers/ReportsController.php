@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Number;
 use App\Models\PrintReport;
 use App\Models\Queue;
 use App\Models\ServiceReport;
 use App\Models\User;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ReportsController extends Controller
 {
@@ -18,95 +19,80 @@ class ReportsController extends Controller
     }
     public function generateReport(Request $request)
     {
-        $service_query = PrintReport::query();
         $datas = $request->all();
-
         $date_start = DateTime::createFromFormat('Y-m-d', $datas['date_start']);
         $date_end = DateTime::createFromFormat('Y-m-d', $datas['date_end']);
+        $user = Auth::guard('web')->user();
 
-        // Filters reports based on received dates
-        if ($date_start && $date_end) {
-            $service_query->whereDate('created_at', '>=', $date_start);
-            $service_query->whereDate('created_at', '<=', $date_end);
+        $queues = $user->queues;
+        $attendants = $user->attendants;
+        $ids_attendandts = $attendants->pluck('id');
+
+        $services = DB::table('service_reports')->whereDate('created_at', '>=', $date_start)->whereDate('created_at', '<=', $date_end);
+        $services = $services->whereIn('attendant_id', $ids_attendandts)->get();
+        $prints = PrintReport::whereDate('created_at', '>=', $date_start)->whereDate('created_at', '<=', $date_end);
+        $prints = $prints->whereIn('user_id', $ids_attendandts)->get();
+        if ($services->count() == 0 && $prints->count() == 0) {
+            return redirect()->back()->with('error', 'Não há dados para gerar o relatório');
         }
-
-        // Returns only reports for the dates specified in the form
-        $queue_query = Queue::query();
-
-        if ($date_start && $date_end) {
-            $queue_query->whereDate('created_at', '>=', $date_start);
-            $queue_query->whereDate('created_at', '<=', $date_end);
-        }
-        $queues = $queue_query->get();
         $queueNumbersCount = array();
         $queueTimeCalls = array();
         $queueCountCalls = array();
-        foreach ($queues as $queue) {
-            $temp = array($queue->name => $service_query->where('queue', $queue->name)->count());
-            $queueNumbersCount = $queueNumbersCount + $temp;
-            $queue->countCalls =
-                ServiceReport::where('queue', $queue->name)->where('action', "CALL")
-                ->whereDate('created_at', '>=', $date_start)
-                ->whereDate('created_at', '<=', $date_end)->count();
+        foreach ($queues as $key => $queue) {
+            $queueNumbersCount = $queueNumbersCount + array($queue->name => $prints->where('queue', $queue->name)->count());
+            $service_queue =  $services->where('queue_id', $queue->id);
+            $queue->countCalls = $service_queue->where('action', "CALL")->count();
 
             if ($queue->countCalls > 0) {
-                $reports = ServiceReport::where('queue', $queue->name)->where('action', "CALL")
-                    ->whereDate('created_at', '>=', $date_start)
-                    ->whereDate('created_at', '<=', $date_end)->get();
+                $reports = $service_queue->where('action', "CALL");
                 $sumTime = 0;
                 foreach ($reports as $report) {
                     $sumTime += $report->time;
                 }
-                $queue->averageTime = $sumTime / $queue->countCalls;
-                $temp = array($queue->name => $queue->countCalls);
-                $queueCountCalls = $queueCountCalls + $temp;
+                $queue->averageTime = round($sumTime / $queue->countCalls);
                 $temp = array($queue->name => $queue->averageTime);
                 $queueTimeCalls = $queueTimeCalls + $temp;
+                $temp = array($queue->name => $queue->countCalls);
+                $queueCountCalls = $queueCountCalls + $temp;
             } else {
                 $temp = array($queue->name => 0);
-                $queueCountCalls = $queueCountCalls + $temp;
                 $queueTimeCalls = $queueTimeCalls + $temp;
+                $temp = array($queue->name => 0);
+                $queueCountCalls = $queueCountCalls + $temp;
             }
         }
-        $users = User::all();
-        $userCalls = array();
-        $userAverage = array();
-        foreach ($users as $user) {
-            $user->countCalls = ServiceReport::where('attendant', $user->name)->where('action', "CALL")
-                ->whereDate('created_at', '>=', $date_start)
-                ->whereDate('created_at', '<=', $date_end)->count();
-            if ($user->countCalls > 0) {
-                $reports = ServiceReport::where('attendant', $user->name)
-                    ->where('action', "CALL")
-                    ->whereDate('created_at', '>=', $date_start)
-                    ->whereDate('created_at', '<=', $date_end)
-                    ->get();
+        $attendantCalls = array();
+        $attendantAverage = array();
+        foreach ($attendants as $attendant) {
+            $reports = $services->where('attendant_id', $attendant->id);
+            $attendant->countCalls = $services->where('attendant_id', $attendant->id)->where('action', 'CALL')->count();
+            if ($attendant->countCalls > 0) {
+                $reports_call = $reports->where('action', "CALL");
                 $sumTime = 0;
-                foreach ($reports as $report) {
+                foreach ($reports_call as $report) {
                     $sumTime += $report->time;
                 }
-                $user->averageTime = round($sumTime / $user->countCalls);
-                $reports = ServiceReport::where('attendant', $user->name)
-                    ->where('action', "CONCLUDE")
-                    ->whereDate('created_at', '>=', $date_start)
-                    ->whereDate('created_at', '<=', $date_end)
-                    ->get();
+                $attendant->averageTime = round($sumTime / $attendant->countCalls);
+                $reports_conclude = $reports->where('action', "CONCLUDE");
+
                 $sumTime = 0;
-                foreach ($reports as $report) {
+                foreach ($reports_conclude as $report) {
                     $sumTime += $report->time;
                 }
-                $user->timeService = $sumTime / $user->countCalls;
-                $temp = array($user->name => $user->timeService);
-                $userAverage = $userAverage + $temp;
-                $temp = array($user->name => $user->averageTime);
-                $userCalls = $userCalls + $temp;
+                $attendant->timeService = $sumTime / $attendant->countCalls;
+                $temp = array($attendant->name => $attendant->timeService);
+                $attendantAverage = $attendantAverage + $temp;
+                $temp = array($attendant->name => $attendant->averageTime);
+                $attendantCalls = $attendantCalls + $temp;
             } else {
-                $temp = array($user->name => 0);
-                $userAverage = $userAverage + $temp;
-                $temp = array($user->name => 0);
-                $userCalls = $userCalls + $temp;
+                $temp = array($attendant->name => 0);
+                $attendantAverage = $attendantAverage + $temp;
+                $temp = array($attendant->name => 0);
+                $attendantCalls = $attendantCalls + $temp;
             }
         }
-        return view('reports.chart', compact('userCalls', 'userAverage', 'queueTimeCalls', 'queueCountCalls', 'queueNumbersCount'));
+
+
+        return view('reports.chart', compact('attendantCalls', 'attendantAverage', 'queueTimeCalls', 'queueCountCalls', 'queueNumbersCount'));
     }
 }

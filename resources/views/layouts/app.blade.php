@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Painel de Senhas</title>
     <link rel="icon" href="{{ url('images/logo-icon.png') }}">
+    <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
     <style>
         body {
             background-image: url('/images/bg-sicoob.png');
@@ -23,6 +24,8 @@
 <body>
 
     @yield('content')
+
+    <script src="{{ asset('js/select2.min.js') }}"></script>
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('js/bootstrap.js') }}"></script>
 </body>

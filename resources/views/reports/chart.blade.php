@@ -34,7 +34,7 @@
     <script src="{{ asset('js/bootstrap.js') }}"></script>
     <script>
         var operador=
-        <?php echo json_encode($userCalls); ?>;
+        <?php echo json_encode($attendantCalls); ?>;
         var chaves = Object.keys(operador);
         const labelsChamada = chaves;
         const dataChamada = {
@@ -43,7 +43,7 @@
                 label: 'Tempo médio',
                 backgroundColor: 'rgb(0, 160, 145)',
                 borderColor: 'rgb(0, 54, 65)',
-                data: [{{ implode(',', $userCalls) }}],
+                data: [{{ implode(',', $attendantCalls) }}],
             }]
         };
         const configChamada = {
@@ -68,7 +68,7 @@
             }
             },
         };
-        var operador= <?php echo json_encode($userAverage); ?>;
+        var operador= <?php echo json_encode($attendantAverage); ?>;
         var chaves = Object.keys(operador);
         const labelsTimeAtend = chaves;
         const dataTimeAtend = {
@@ -77,7 +77,7 @@
                 label: 'Tempo médio',
                 backgroundColor: 'rgb(0, 54, 65)',
                 borderColor: 'rgb(0, 160, 145)',
-                data: [{{ implode(',', $userAverage) }}],
+                data: [{{ implode(',', $attendantAverage) }}],
             }]
         };
         const configTimeAtend = {

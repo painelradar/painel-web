@@ -10,19 +10,32 @@ class ServiceReport extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'stringNumber',
-        'queue',
-        'attendant',
+        'number_id',
+        'queue_id',
+        'attendant_id',
         'time',
         'action',
     ];
 
-    public function newServiceReport($queue, $stringNumber)
+    public function newServiceReport($queue, $number, $minutes, $action)
     {
-        $report = new ServiceReport();
-        $report->stringNumber = $stringNumber;
-        $report->queue = $queue->name;
-        $report->attendant = Auth::user()->name;
-        $report->save();
+        $this->number_id = $number->id;
+        $this->action = $action;
+        $this->time = $minutes;
+        $this->queue_id = $queue->id;
+        $this->attendant_id = Auth::user()->id;
+        $this->save();
+    }
+    public function queue()
+    {
+        return $this->belongsTo(Queue::class);
+    }
+    public function attendant()
+    {
+        return $this->belongsTo(Attendant::class);
+    }
+    public function number()
+    {
+        return $this->belongsTo(Number::class);
     }
 }

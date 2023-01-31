@@ -9,15 +9,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Number extends Model
 {
-    use HasFactory;
+    use HasFactory, softDeletes;
 
     protected $fillable = [
         'integerNumber',
         'stringNumber',
         'status',
         'queue_id',
-        'coop',
-        'pa'
+        'user_id',
     ];
     public function minutesWaiting()
     {
@@ -25,8 +24,17 @@ class Number extends Model
         $minutes = $updated->diffInMinutes(Carbon::now());
         return $minutes;
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     public function queue()
     {
         return $this->belongsTo(Queue::class);
+    }
+    public function serviceReport()
+    {
+        return $this->hasMany(ServiceReport::class);
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Attendant;
 use App\Models\Number;
 use App\Models\Queue;
 use App\Models\QueueToCall;
 use App\Models\ServiceReport;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -16,8 +18,13 @@ class ClientNumbers extends Component
 
     public function callNext(Queue $queue)
     {
-        if ($queue->numbers->count() != 0) {
-            $number = Number::where('status', 'WAITING')->where('queue_id', $queue->id)->first();
+        $panel = Auth::user()->user;
+
+        if ($panel->numbers()->where('status', 'WAITING')->count() > 0) {
+
+            $number = Number::where('queue_id', $queue->id)
+                ->where('status', 'WAITING')
+                ->where('user_id', Auth::user()->user->id)->first();
             if (!$number) {
                 return redirect()->back();
             }
@@ -27,20 +34,11 @@ class ClientNumbers extends Component
             $number->status =  "IN_SERVICE";
             $updated = new Carbon($number->updated_at);
             $minutes = $updated->diffInMinutes(Carbon::now());
-            ServiceReport::create([
-                'stringNumber' => $number->stringNumber,
-                'queue' => $number->queue->name,
-                'attendant' => Auth::user()->name,
-                'action' => 'CALL',
-                'time' => $minutes,
-            ]);
+            $serviceReport = new ServiceReport();
+            $serviceReport->newServiceReport($queue, $number, $minutes, 'CALL');
+            $queueToCall = new QueueToCall();
+            $queueToCall->newNumberToCall($number);
             $number->update();
-            QueueToCall::create([
-                'stringNumber' => $number->stringNumber,
-                'queue' => $number->queue->name,
-                'number' => $number->integerNumber,
-                'table_number' => Auth::user()->table_number,
-            ]);
             $user = Auth::user();
             $user->in_atend = true;
             $user->number_id = $number->id;
@@ -56,21 +54,11 @@ class ClientNumbers extends Component
         $number->status =  "IN_SERVICE";
         $updated = new Carbon($number->updated_at);
         $minutes = $updated->diffInMinutes(Carbon::now());
-        ServiceReport::create([
-            'stringNumber' => $number->stringNumber,
-            'queue' => $number->queue->name,
-            'attendant' => Auth::user()->name,
-            'action' => 'CALL',
-            'time' => $minutes,
-        ]);
+        $serviceReport = new ServiceReport();
+        $serviceReport->newServiceReport($number->queue, $number, $minutes, 'CALL');
+        $queueToCall = new QueueToCall();
+        $queueToCall->newNumberToCall($number);
         $number->update();
-        QueueToCall::create([
-            'stringNumber' => $number->stringNumber,
-            'queue' => $number->queue->name,
-            'queue_id' => $number->queue_id,
-            'number' => $number->integerNumber,
-            'table_number' => Auth::user()->table_number,
-        ]);
         $user = Auth::user();
         $user->in_atend = true;
         $user->number_id = $number->id;
@@ -86,15 +74,17 @@ class ClientNumbers extends Component
     }
     public function render()
     {
-
-
         $queues = Auth::user()->queues->sortBy('name');
-        $absents = Number::whereIn('queue_id', $queues->pluck('id'))->where('status', 'ABSENT')->orderBy('id', 'desc')->take(5)->get();
+        $absents = Number::whereIn('queue_id', $queues->pluck('id'))
+            ->where('status', 'ABSENT')
+            ->where('user_id', Auth::user()->user->id)
+            ->orderBy('id', 'desc')
+            ->take(5)->get();
+
         $numbers = Number::whereIn('queue_id', $queues->pluck('id'))
-                    ->where('status', 'WAITING')
-                    ->where('coop', Auth::user()->coop)
-                    ->where('pa', Auth::user()->pa)
-                    ->orderBy('updated_at', 'asc')->get();
+            ->where('status', 'WAITING')
+            ->where('user_id', Auth::user()->user->id)
+            ->orderBy('updated_at', 'asc')->get();
         return view('livewire.client-numbers', compact('queues', 'numbers', 'absents'))->layout('layouts.client-numbers');
     }
 }

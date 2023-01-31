@@ -14,8 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
+        'guard' => 'attendant',
+        'passwords' => 'attendants',
     ],
 
     /*
@@ -39,6 +39,10 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+        'attendant' => [
+            'driver' => 'session',
+            'provider' => 'attendants',
         ],
     ],
 
@@ -64,6 +68,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+        'attendants' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Attendant::class,
+        ],
     ],
 
     /*
@@ -84,6 +92,12 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'attendants' => [
+            'provider' => 'attendants',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

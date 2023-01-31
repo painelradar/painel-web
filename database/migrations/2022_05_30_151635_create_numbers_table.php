@@ -15,13 +15,14 @@ return new class extends Migration
     {
         Schema::create('numbers', function (Blueprint $table) {
             $table->id();
+            $table->softDeletes();
             $table->integer('integerNumber');
             $table->string('stringNumber');
-            $table->string('pa');
-            $table->string('coop');
             $table->enum('status', ['WAITING', 'IN_SERVICE', 'FINISHED', 'ABSENT']);
             $table->unsignedBigInteger('queue_id');
             $table->foreign('queue_id')->references('id')->on('queues');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

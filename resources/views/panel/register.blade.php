@@ -19,16 +19,6 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="cooperative" class="form-label">Cooperativa</label>
-                    <input type="text" class="form-control" id="cooperative" name="cooperative"
-                        value="{{ old('cooperative') }}" required autofocus>
-                </div>
-                <div class="mb-3">
-                    <label for="pa" class="form-label">PA</label>
-                    <input type="text" class="form-control" id="pa" name="pa"
-                        value="{{ old('pa') }}" required autofocus>
-                </div>
-                <div class="mb-3">
                     <label class="form-label">Filas</label>
                     <div class="form-check">
                         @foreach ($queues as $queue)

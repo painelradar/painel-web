@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AdminAcess
+class AttendantAcess
 {
     /**
      * Handle an incoming request.
@@ -17,10 +17,10 @@ class AdminAcess
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::guard('web')->check() && Auth::guard('web')->user()->admin) {
+        if (Auth::check()) {
             return $next($request);
         } else {
-            return redirect()->route('client.home');
+            return redirect()->route('user.login');
         }
     }
 }

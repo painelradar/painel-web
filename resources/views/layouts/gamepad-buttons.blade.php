@@ -7,13 +7,17 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" href="{{ url('images/logo-icon.png') }}">
     <title>Painel de Senhas</title>
-    @livewireStyles
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+    <style>
+        body {
+            background-image: url('/images/bg-sicoob.png');
+            background-size: cover;
+        }
+    </style>
 </head>
 
 <body>
-    {{ $slot }}
-    @livewireScripts
+    @yield('content')
     <script>
         options = {
             a() {
@@ -33,9 +37,6 @@
             },
             lb() {
                 $('#button').val('lb');
-            },
-            t() {
-                $('#button').val('t');
             }
         };
     </script>

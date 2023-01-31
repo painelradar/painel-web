@@ -61,13 +61,6 @@
 
     <script src="{{ asset('js/bootstrap.js') }}"></script>
     <script>
-        function clickButton(fila, senha){
-            printNumber(fila,senha);
-
-            setTimeout(function() {
-                $('#showPrintLoading').modal('hide');
-            }, 3000);
-        };
         // Get the current date/time
         let date = new Date();
 
@@ -91,7 +84,12 @@
         let strDate = day + '/' + month + '/' + year;
         let strTime = hour + ':' + minutes + ':' + seconds;
 
+
+
+
+
         function printNumber(queue, number){
+
             document.getElementById('queue').innerHTML = queue;
             document.getElementById('number').innerHTML = number;
             document.getElementById('date').innerHTML = strDate;

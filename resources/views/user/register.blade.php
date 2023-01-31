@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-6 offset-md-3 border rounded p-3"
             style="background-color: white !important; margin-top:7vh;.">
-            <form action="{{ route('user.store') }}" method="POST">
+            <form action="{{ route('user.store', $panel->id) }}" method="POST">
                 @csrf
                 <div class="mb-3">
                     <label for="name" class="form-label">Nome</label>
@@ -40,21 +40,11 @@
                     </div>
                 </div>
 
-                <div class="mb-3">
+                <div class=" mb-3">
                     <label for="table_number" class="form-label">Guichê</label>
                     <input type="number" class="form-control @error('table_number') is-invalid @enderror"
                         id="table_number" value="{{ old('table_number') }}" name="table_number" required>
 
-                </div>
-                <div class="mb-3">
-                    <label for="cooperative" class="form-label">Cooperativa</label>
-                    <input type="text" class="form-control" id="cooperative" name="cooperative"
-                        value="{{ old('cooperative') }}" required autofocus>
-                </div>
-                <div class="mb-3">
-                    <label for="pa" class="form-label">PA</label>
-                    <input type="text" class="form-control" id="pa" name="pa"
-                        value="{{ old('pa') }}" required autofocus>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
