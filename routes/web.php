@@ -18,9 +18,10 @@ Route::get('usuario/entrar', [AttendantController::class, 'login'])->name('user.
 Route::post('entrar', [AttendantController::class, 'auth'])->name('user.auth');
 
 Route::get('painel/registrar', [UserController::class, 'register'])->name('panel.register');
+Route::post('painel/registrar', [UserController::class, 'store'])->name('panel.store');
 Route::post('painel/entrar', [UserController::class, 'auth'])->name('panel.auth');
 Route::get('painel/entrar', [UserController::class, 'login'])->name('panel.login');
-Route::post('registrar/painel', [UserController::class, 'store'])->name('panel.store');
+
 
 Route::middleware(['admin'])->group(function () {
     Route::get('limpar', [PanelController::class, 'deleteNumbers']);

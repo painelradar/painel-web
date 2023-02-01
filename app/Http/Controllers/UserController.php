@@ -31,6 +31,7 @@ class UserController extends Controller
             'min' => 'A senha deve ter no mínimo :min caracteres!',
             'max' => 'O nome deve ter no máximo :max caracteres!',
         ];
+
         $request->validate([
             'name' => ['required', 'string', 'unique:users', 'max:255'],
             'password' => ['required', Password::min(8), 'confirmed'],
@@ -46,6 +47,7 @@ class UserController extends Controller
                 'queue_id' => $id,
             ]);
         }
+
         Auth::guard('web')->login($user, $request->remember);
         return redirect()->route('print.numbers');
     }

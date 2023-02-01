@@ -8,6 +8,7 @@
             style="background-color: white !important; margin-top:7vh;.">
             <form action="{{ route('panel.store') }}" method="POST">
                 @csrf
+                @method('POST')
                 <div class="mb-3">
                     <label for="name" class="form-label">Agência</label>
                     <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name"

@@ -14,7 +14,7 @@
 <body>
     @yield('content')
     <script src="{{ asset('js/jquery.js') }}"></script>
-    {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
+
     <script>
         options = {
             @foreach ($gamepads as $gamepad)
