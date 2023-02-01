@@ -11,16 +11,16 @@ class GamepadController extends Controller
 {
     public function index()
     {
-        $queues = Auth::user()->queues->sortBy('name');
-        $gamepads = Auth::user()->gamepads;
+        $queues = Auth::guard('web')->user()->queues->sortBy('name');
+        $gamepads = Auth::guard('web')->user()->gamepads;
         return view('panel.gamepad', compact('queues', 'gamepads'));
     }
     public function createButton(Request $request)
     {
 
         $queue = Queue::find($request->queue);
-        $gamepad = Gamepad::where('user_id', Auth::id())->where('queue_id', $request->queue)->first();
-        $button = Gamepad::where('user_id', Auth::id())->where('button', $request->button)->first();
+        $gamepad = Gamepad::where('user_id', Auth::guard('web')->id())->where('queue_id', $request->queue)->first();
+        $button = Gamepad::where('user_id', Auth::guard('web')->id())->where('button', $request->button)->first();
         if (!$request->button) {
             session()->flash('message', 'O botão não pode ser vazio!');
         } else if ($gamepad) {
@@ -34,7 +34,7 @@ class GamepadController extends Controller
         } else {
             $gamepad = new Gamepad();
             $gamepad->button = $request->button;
-            $gamepad->user_id = Auth::id();
+            $gamepad->user_id = Auth::guard('web')->id();
             $gamepad->queue_id = $queue->id;
             $gamepad->save();
         }
