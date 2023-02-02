@@ -145,7 +145,7 @@
         const speak = async text => {
             const message = new SpeechSynthesisUtterance(text)
             message.voice = voice;
-            message.rate = 1.25;
+            message.rate = 1.10;
             speechSynthesis.speak(message);
             document.getElementById("stringNumber").className = "stringNumber";
             document.getElementById("table-number").className = "stringTable";
