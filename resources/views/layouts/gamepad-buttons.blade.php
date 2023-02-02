@@ -37,7 +37,7 @@
             },
             lb() {
                 $('#button').val('lb');
-            }
+            },
             rt() {
                 $('#button').val('rt');
             },
@@ -139,6 +139,7 @@
 
                         if(options[key]){
                             options[key]();
+
                             setTimeout(scanKeys, 3000);
                         }
                     }else{
@@ -150,7 +151,7 @@
 
         }
         scanKeys();
-        setInterval(atualizarHora, 1000);
+
     </script>
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('js/bootstrap.js') }}"></script>

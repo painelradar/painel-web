@@ -60,46 +60,6 @@
     @livewireScripts
 
     <script src="{{ asset('js/bootstrap.js') }}"></script>
-    <script>
-        // Get the current date/time
-        let date = new Date();
-
-        // Store each part in a variable
-        let day = date.getDate(); // 1-31
-        let month = date.getMonth(); // 0-11 (zero=January)
-        let year = date.getFullYear(); // 4 digits
-        let hour = date.getHours(); // 0-23
-        let minutes = date.getMinutes(); // 0-59
-        let seconds = date.getSeconds(); // 0-59
-
-        // Format the date and time
-        if(day < 10){ day='0' + day; }
-        if(month < 10){ month='0' + (month+1); }
-        if(minutes < 10){
-            minutes = '0' + minutes;
-        }
-        if(seconds < 10){
-            seconds = '0' + seconds;
-        }
-        let strDate = day + '/' + month + '/' + year;
-        let strTime = hour + ':' + minutes + ':' + seconds;
-
-
-
-
-
-        function printNumber(queue, number){
-
-            document.getElementById('queue').innerHTML = queue;
-            document.getElementById('number').innerHTML = number;
-            document.getElementById('date').innerHTML = strDate;
-            document.getElementById('time').innerHTML = strTime;
-            window.print();
-            setTimeout(function() {
-                $('#showPrintLoading').modal('show');
-            }, 500);
-        }
-    </script>
 
 </body>
 

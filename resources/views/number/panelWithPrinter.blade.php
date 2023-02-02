@@ -69,7 +69,7 @@
 <div class="print">
     <div style="line-height: 0.010;">
         <div style="text-align: center; line-height: 0.010;">
-            <img src="{{ url('images/logo.png') }}" alt="Logo Sicoob" style="max-height: 100px; max-width:150px;">
+            <h3 style="max-height: 2px">SICOOB NORTE</h3>
             <hr>
             <h4 id="queue" style="max-height: 2px">-</h4>
             <h1 id="number" style="max-height: 2px">-</h1>

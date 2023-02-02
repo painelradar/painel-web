@@ -43,7 +43,7 @@ class AttendantController extends Controller
     public function edit($id)
     {
         $attendant = Attendant::find($id);
-        $queues = $attendant->queues->sortBy('name');
+        $queues = User::find($attendant->user_id)->queues;
 
         return view('user.edit', compact('attendant', 'queues'));
     }

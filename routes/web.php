@@ -46,6 +46,7 @@ Route::middleware(['admin'])->group(function () {
         $gamepads = Auth::guard('web')->user()->gamepads->sortBy('button');
         return view('number.panelWithPrinter', compact('gamepads'));
     });
+    Route::get('limpa-senhas', [PanelController::class, 'deleteNumbers'])->name('panel.deleteNumbers');
 });
 Route::middleware(['attendant'])->group(function () {
 

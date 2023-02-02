@@ -90,11 +90,13 @@
                 if(botoes.indexOf(1) > - 1){
 
                     let index = botoes.indexOf(1);
-
                     let key = Object.keys(gamepad.buttons)[index];
                     if(options[key]){
                         options[key]();
-                        setTimeout(scanKeys, 3000);
+                        setTimeout(function(){
+                            scanKeys();
+                        }, 3000);
+                        return;
                     }
                 }else{
                     setTimeout(scanKeys, 100);
@@ -116,7 +118,6 @@
         }
 
         function printNumber(queue, number){
-            console.log(queue, number);
             let date = new Date();
             let strDate = date.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
             let strTime = date.toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo' });

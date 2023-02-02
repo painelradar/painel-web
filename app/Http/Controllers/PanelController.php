@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Number;
+use App\Models\PrintReport;
 use App\Models\Queue;
 use App\Models\QueueToCall;
 
@@ -33,8 +34,7 @@ class PanelController extends Controller
     }
     public function deleteNumbers()
     {
-        Number::all()->each(function ($number) {
-            $number->delete();
-        });
+        PrintReport::where('user_id', Auth::guard('web')->id())->delete();
+        Number::where('user_id', Auth::guard('web')->id())->forceDelete();
     }
 }
