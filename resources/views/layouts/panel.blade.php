@@ -132,6 +132,7 @@
             if(minuto <10){
                 minuto = "0" + minuto;
             }
+            if(hora < 10){ hora='0' + hora; } //
             var horaImprimivel = hora + ":" + minuto + ":" + segundo;
             var dataImprimivel = dia + "/" + mes + "/" + ano;
             $('#stringTime').html(horaImprimivel);

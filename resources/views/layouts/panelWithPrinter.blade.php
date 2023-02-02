@@ -111,16 +111,39 @@
 
         function atualizarHora(){
             let date = new Date();
-            let strDate = date.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-            let strTime = date.toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+
+            // Store each part in a variable
+            let day = date.getDate(); // 1-31
+            let month = date.getMonth(); // 0-11 (zero=January)
+            let year = date.getFullYear(); // 4 digits
+            let hour = date.getHours(); // 0-23
+            let minutes = date.getMinutes(); // 0-59
+            let seconds = date.getSeconds(); // 0-59
+
+            // Format the date and time
+            if(hour < 10){ hour='0' + hour; } // 0-9 becomes 00-09
+            if(day < 10){ day='0' + day; } if(month < 10){ month='0' + (month+1); } if(minutes < 10){ minutes='0' + minutes; }
+                if(seconds < 10){ seconds='0' + seconds; } let strDate=day + '/' + month + '/' + year; let strTime=hour + ':' +
+                minutes + ':' + seconds;
             document.getElementById('stringTime').innerHTML = strTime;
             document.getElementById('stringDate').innerHTML = strDate;
         }
 
         function printNumber(queue, number){
             let date = new Date();
-            let strDate = date.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-            let strTime = date.toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+
+            // Store each part in a variable
+            let day = date.getDate(); // 1-31
+            let month = date.getMonth(); // 0-11 (zero=January)
+            let year = date.getFullYear(); // 4 digits
+            let hour = date.getHours(); // 0-23
+            let minutes = date.getMinutes(); // 0-59
+            let seconds = date.getSeconds(); // 0-59
+
+            // Format the date and time
+            if(day < 10){ day='0' + day; } if(month < 10){ month='0' + (month+1); } if(minutes < 10){ minutes='0' + minutes; }
+                if(seconds < 10){ seconds='0' + seconds; } let strDate=day + '/' + month + '/' + year; let strTime=hour + ':' +
+                minutes + ':' + seconds;
             document.getElementById('queue').innerHTML = queue;
             document.getElementById('number').innerHTML = number;
             document.getElementById('date').innerHTML = strDate + ' - ' + strTime;

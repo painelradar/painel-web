@@ -93,7 +93,7 @@
             let hour = date.getHours(); // 0-23
             let minutes = date.getMinutes(); // 0-59
             let seconds = date.getSeconds(); // 0-59
-
+            if(hour < 10){ hour='0' + hour; }
             // Format the date and time
             if(day < 10){ day='0' + day; } if(month < 10){ month='0' + (month+1); } if(minutes < 10){ minutes='0' + minutes; }
                 if(seconds < 10){ seconds='0' + seconds; } let strDate=day + '/' + month + '/' + year; let strTime=hour + ':' +
