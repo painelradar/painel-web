@@ -69,12 +69,13 @@
 <div class="print">
     <div style="line-height: 0.010;">
         <div style="text-align: center; line-height: 0.010;">
+
             <h3 style="max-height: 2px">SICOOB NORTE</h3>
             <hr>
             <h4 id="queue" style="max-height: 2px">-</h4>
             <h1 id="number" style="max-height: 2px">-</h1>
             <hr>
-            <h6 id="date" style="max-height: 2px">-</h4>
+            <h5 id="date" style="max-height: 2px; padding-bottom: 20px !important;">-</h5>
         </div>
     </div>
 

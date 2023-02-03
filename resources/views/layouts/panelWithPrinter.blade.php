@@ -8,6 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <link rel="icon" href="{{ url('images/logo-icon.png') }}">
     <title>Painel de Senhas</title>
+
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 
