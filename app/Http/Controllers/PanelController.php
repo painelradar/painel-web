@@ -8,6 +8,7 @@ use App\Models\Queue;
 use App\Models\QueueToCall;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PanelController extends Controller
 {
@@ -31,10 +32,5 @@ class PanelController extends Controller
             $number = null;
             return json_encode($number);
         }
-    }
-    public function deleteNumbers()
-    {
-        PrintReport::where('user_id', Auth::guard('web')->id())->delete();
-        Number::where('user_id', Auth::guard('web')->id())->forceDelete();
     }
 }

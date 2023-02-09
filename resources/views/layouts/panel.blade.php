@@ -139,11 +139,11 @@
             $('#stringDate').html(dataImprimivel);
         };
 
-        let voices = speechSynthesis.getVoices();
-        var voice = voices[0];
+        const voices = speechSynthesis.getVoices();
 
         const speak = async text => {
             const message = new SpeechSynthesisUtterance(text)
+            console.log(voices);
             message.voice = voice;
             message.rate = 1.10;
             speechSynthesis.speak(message);
@@ -183,6 +183,19 @@
             }, interval);
         }
         chamaInterVal(1000);
+        function populateVoiceList() {
+        if (typeof speechSynthesis === 'undefined') {
+        return;
+        }
+
+        const voices = speechSynthesis.getVoices();
+
+        for (let i = 0; i < voices.length; i++) { const option=document.createElement('option');
+            option.textContent=`${voices[i].name} (${voices[i].lang})`; if (voices[i].default) { option.textContent
+            +=' — DEFAULT' ; } option.setAttribute('data-lang', voices[i].lang); option.setAttribute('data-name',
+            voices[i].name); document.getElementById("voiceSelect").appendChild(option); } } populateVoiceList(); if (typeof
+            speechSynthesis !=='undefined' && speechSynthesis.onvoiceschanged !==undefined) {
+            speechSynthesis.onvoiceschanged=populateVoiceList; }
     </script>
 </body>
 

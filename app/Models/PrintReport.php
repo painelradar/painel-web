@@ -22,8 +22,4 @@ class PrintReport extends Model
         $this->user_id = Auth::guard('web')->user()->id;
         $this->save();
     }
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

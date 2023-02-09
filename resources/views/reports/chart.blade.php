@@ -13,19 +13,22 @@
 
 <body>
     <div class="container">
-        <div class="row d-flex justify-content-center">
-            <div class="chart-container" style="height:50vh; width:40vw">
-                <canvas id="myChart"></canvas>
-                <br>
-                <canvas id="myChart5"></canvas>
-                <br>
-                <canvas id="myChart2"></canvas>
-                <br>
-                <canvas id="myChart3"></canvas>
-                <br>
-                <canvas id="myChart4"></canvas>
-                <br>
+        <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+                <div class="chart-container" style="height:50vh; width:50vw">
+                    <canvas id="myChart"></canvas>
+                    <br>
+                    <canvas id="myChart5"></canvas>
+                    <br>
+                    <canvas id="myChart2"></canvas>
+                    <br>
+                    <canvas id="myChart3"></canvas>
+                    <br>
+                    <canvas id="myChart4"></canvas>
+                    <br>
+                </div>
             </div>
+
         </div>
 
     </div>
@@ -63,7 +66,7 @@
                 },
                 title: {
                     display: true,
-                    text: 'Tempo médio de chamada X Operador'
+                    text: 'Tempo médio ocioso X Operador'
                 }
             }
             },
@@ -135,7 +138,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Tempo médio de chamada X Atendimento'
+                        text: 'Tempo médio em espera X Fila'
                     }
                 }
             },
@@ -207,7 +210,7 @@
                 },
                 title: {
                     display: true,
-                    text: 'Número de senhas impressas por atendimento'
+                    text: 'Número de senhas impressas por fila'
                 }
             }
             },

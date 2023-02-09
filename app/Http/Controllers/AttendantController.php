@@ -17,12 +17,16 @@ class AttendantController extends Controller
     public function register($name)
     {
         $panel = User::where('name', $name)->first();
-        $queues = $panel->queues;
+        $queues = $panel->queues->sortBy('name');
+
         return view('user.register', compact('queues', 'panel'));
     }
 
     public function login()
     {
+        if (Auth::guard('attendant')->check()) {
+            return redirect()->route('client.home');
+        }
         return view('user.login');
     }
     public function auth(Request $request)
@@ -43,7 +47,7 @@ class AttendantController extends Controller
     public function edit($id)
     {
         $attendant = Attendant::find($id);
-        $queues = User::find($attendant->user_id)->queues;
+        $queues = User::find($attendant->user_id)->queues->orderBy('name');
 
         return view('user.edit', compact('attendant', 'queues'));
     }
@@ -111,5 +115,41 @@ class AttendantController extends Controller
     {
         Auth::logout();
         return redirect()->route('user.login');
+    }
+    public function delete($email)
+    {
+        if (Attendant::where('email', $email)->exists()) {
+            $attendant = Attendant::where('email', $email)->first();
+            if (Auth::guard('web')->user()->id == $attendant->user_id) {
+                foreach ($attendant->queues as $queue) {
+                    QueueAttendant::where('attendant_id', $attendant->id)->where('queue_id', $queue->id)->delete();
+                }
+                $attendant->delete();
+                return response()->json(['success' => 'Atendente excluido com sucesso!'], 200);
+            }
+            return response()->json(['error' => 'Você não tem permissão para excluir esse atendente!'], 403);
+        }
+        return response()->json(['error' => 'Atendente não encontrado!'], 404);
+    }
+    public function viewReset($email)
+    {
+        $attendant = Attendant::where('email', $email)->first();
+        return view('user.reset-password', compact('attendant'));
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $messages = [
+            'required' => 'Esse campo é obrigatório!',
+            'confirmed' => 'As senhas não conferem!',
+            'min' => 'A senha deve ter no mínimo :min caracteres!',
+        ];
+        $request->validate([
+            'password' => ['required', Password::min(8), 'confirmed'],
+        ], $messages);
+        $attendant = Attendant::where('email', $request->email)->first();
+        $attendant->password = Hash::make($request->password);
+        $attendant->update();
+        return response()->json(['success' => 'Senha alterada com sucesso!'], 200);
     }
 }

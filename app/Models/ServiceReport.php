@@ -34,8 +34,4 @@ class ServiceReport extends Model
     {
         return $this->belongsTo(Attendant::class);
     }
-    public function number()
-    {
-        return $this->belongsTo(Number::class);
-    }
 }

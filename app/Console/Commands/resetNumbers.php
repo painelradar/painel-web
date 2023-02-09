@@ -2,10 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Number;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class ResetCounterNumbers extends Command
+class resetNumbers extends Command
 {
     /**
      * The name and signature of the console command.
@@ -19,7 +20,7 @@ class ResetCounterNumbers extends Command
      *
      * @var string
      */
-    protected $description = 'Reset counter number';
+    protected $description = 'Reseta o contador de senhas.';
 
     /**
      * Execute the console command.
@@ -28,8 +29,12 @@ class ResetCounterNumbers extends Command
      */
     public function handle()
     {
-        DB::table('users')->update(['in_atend' => false]);
-        DB::table('users')->update(['number_id' => null]);
-        DB::table('numbers')->delete();
+
+        DB::table('attendants')->update(['in_atend' => false]);
+        DB::table('attendants')->update(['number_id' => null]);
+        $numbers = Number::all();
+        foreach ($numbers as $number) {
+            $number->delete();
+        }
     }
 }

@@ -21,6 +21,9 @@ class UserController extends Controller
     }
     public function login()
     {
+        if (Auth::guard('web')->check()) {
+            return redirect()->route('print.numbers');
+        }
         return view('panel.login');
     }
     public function store(Request $request)

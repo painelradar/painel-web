@@ -21,10 +21,7 @@ class Attendant extends Authenticatable
     protected $hidden = [
         'password',
     ];
-    public function services()
-    {
-        return $this->hasMany(ServiceReport::class);
-    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

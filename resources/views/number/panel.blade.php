@@ -58,11 +58,12 @@
             <td class="video">
                 <div>
                     <video width="95%" height="40%" autoplay loop muted>
-                        <source src="{{ url('/videos/video.mp4') }}" type="video/mp4" />
+                        <source src="{{ url("/videos/video.mp4") }}" type="video/mp4" />
                     </video>
                 </div>
             </td>
         </tr>
     </tbody>
 </table>
+<select id="voiceSelect"></select>
 @stop

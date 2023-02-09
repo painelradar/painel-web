@@ -21,9 +21,12 @@ Route::get('painel/registrar', [UserController::class, 'register'])->name('panel
 Route::post('painel/registrar', [UserController::class, 'store'])->name('panel.store');
 Route::post('painel/entrar', [UserController::class, 'auth'])->name('panel.auth');
 Route::get('painel/entrar', [UserController::class, 'login'])->name('panel.login');
-
+Route::get('resetar-contador', [PanelController::class, 'resetNumbers'])->name('panel.resetNumbers');
 
 Route::middleware(['admin'])->group(function () {
+    Route::get('alterar-senha/{email}', [AttendantController::class, 'viewReset'])->name('attendant.reset');
+    Route::post('alterar-senha/{email}', [AttendantController::class, 'resetPassword'])->name('attendant.reset');
+    Route::get('usuario/deletar/{email}', [AttendantController::class, 'delete'])->name('attendant.delete');
     Route::get('limpar', [PanelController::class, 'deleteNumbers']);
     Route::get('senhas', PrintNumbers::class)->name('print.numbers');
     Route::get('relatorio', [ReportsController::class, 'index'])->name('reports.index');

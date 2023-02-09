@@ -18,12 +18,12 @@ class Queue extends Model
 
     public function printNumber()
     {
-        $numbers = Number::all();
+        $numbers = Number::where('user_id', Auth::guard('web')->user()->id)->get();
 
         if ($numbers->where('queue_id', $this->id)->count() == 0) {
             $integerNumber = intval($this->minNum);
         } else {
-            $numberTemp = Number::where('queue_id', $this->id)->orderBy('id', 'desc')->first();
+            $numberTemp = Number::where('queue_id', $this->id)->orderBy('id', 'desc')->where('user_id', Auth::guard('web')->user()->id)->first();
             $integer = $numberTemp->integerNumber;
             if ($integer > $this->maxNum) {
                 $integer = $this->minNum;
@@ -32,24 +32,7 @@ class Queue extends Model
             }
             $integerNumber = $integer;
         }
-
-        $stringNumber = $integerNumber;
-        $zeros = 0;
-        if ($integerNumber <= 99) {
-            $zeros = 1;
-            if ($integerNumber <= 9) {
-                $zeros = 2;
-            }
-            if ($integerNumber > 99) {
-                $zeros = 3;
-            }
-        }
-        $stringZero = "";
-
-        for ($i = 0; $i < $zeros; $i++) {
-            $stringZero .= "0";
-        }
-        $stringNumber = $this->initial . $stringZero . $integerNumber;
+        $stringNumber = $this->initial . str_pad($integer, 3, "0", STR_PAD_LEFT);
         Number::create([
             'integerNumber' => $integerNumber,
             'stringNumber' => $stringNumber,

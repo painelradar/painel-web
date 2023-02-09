@@ -6,6 +6,7 @@ use App\Models\PrintReport;
 use App\Models\Queue;
 use App\Models\ServiceReport;
 use App\Models\User;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,12 @@ class ReportsController extends Controller
 
         $queues = $user->queues;
         $attendants = $user->attendants;
+        $i = 0;
+        foreach ($attendants as $attendant) {
+            $i++;
+            $attendant->name = explode(' ', $attendant->name)[0] . ' ' . explode(' ', $attendant->name)[1];
+        }
+
         $ids_attendandts = $attendants->pluck('id');
 
         $services = DB::table('service_reports')->whereDate('created_at', '>=', $date_start)->whereDate('created_at', '<=', $date_end);
@@ -42,6 +49,8 @@ class ReportsController extends Controller
             $queueNumbersCount = $queueNumbersCount + array($queue->name => $prints->where('queue', $queue->name)->count());
             $service_queue =  $services->where('queue_id', $queue->id);
             $queue->countCalls = $service_queue->where('action', "CALL")->count();
+
+
 
             if ($queue->countCalls > 0) {
                 $reports = $service_queue->where('action', "CALL");
@@ -66,17 +75,27 @@ class ReportsController extends Controller
         foreach ($attendants as $attendant) {
             $reports = $services->where('attendant_id', $attendant->id);
             $attendant->countCalls = $services->where('attendant_id', $attendant->id)->where('action', 'CALL')->count();
+
             if ($attendant->countCalls > 0) {
-                $reports_call = $reports->where('action', "CALL");
-                $sumTime = 0;
-                foreach ($reports_call as $report) {
-                    $sumTime += $report->time;
+                $calls = $services->where('attendant_id', $attendant->id)->where('action', "CALL");
+                $concludes = $services->where('attendant_id', $attendant->id)->where('action', "CONCLUDE");
+                $media = 0;
+
+                foreach ($concludes as $key => $conclude) {
+                    if ($conclude == $concludes->last()) {
+                        break;
+                    }
+                    $time_conclude = new Carbon($conclude->created_at);
+                    $time_call = new Carbon($calls[$key + 1]->created_at);
+                    $media += $time_conclude->diffInMinutes($time_call);
                 }
-                $attendant->averageTime = round($sumTime / $attendant->countCalls);
-                $reports_conclude = $reports->where('action', "CONCLUDE");
+
+                $attendant->averageTime = $media / $attendant->countCalls;
+
+                $concludes = $reports->where('action', "CONCLUDE");
 
                 $sumTime = 0;
-                foreach ($reports_conclude as $report) {
+                foreach ($concludes as $report) {
                     $sumTime += $report->time;
                 }
                 $attendant->timeService = $sumTime / $attendant->countCalls;

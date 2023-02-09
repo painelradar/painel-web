@@ -76,8 +76,16 @@ class ActionService extends Component
             $queueToCall->newNumberToCall($number);
         }
     }
+
+    public function verifyAction()
+    {
+        return redirect()->route('client.home');
+    }
     public function render()
     {
+        if (Auth::user()->in_atend == 0) {
+            $this->verifyAction();
+        }
         $user = Auth::user()->user;
         $queues = $user->queues->sortBy('name');
         $number = $this->number;
