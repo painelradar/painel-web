@@ -65,5 +65,4 @@
         </tr>
     </tbody>
 </table>
-<select id="voiceSelect"></select>
 @stop
