@@ -25,7 +25,7 @@ class Queue extends Model
         } else {
             $numberTemp = Number::where('queue_id', $this->id)->orderBy('id', 'desc')->where('user_id', Auth::guard('web')->user()->id)->first();
             $integer = $numberTemp->integerNumber;
-            if ($integer > $this->maxNum) {
+            if (($integer + 1) > $this->maxNum) {
                 $integer = $this->minNum;
             } else {
                 $integer += 1;

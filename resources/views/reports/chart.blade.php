@@ -43,7 +43,7 @@
         const dataChamada = {
             labels: labelsChamada,
             datasets: [{
-                label: 'Tempo médio',
+                label: 'Tempo médio (minutos)',
                 backgroundColor: 'rgb(0, 160, 145)',
                 borderColor: 'rgb(0, 54, 65)',
                 data: [{{ implode(',', $attendantCalls) }}],
@@ -66,7 +66,7 @@
                 },
                 title: {
                     display: true,
-                    text: 'Tempo médio ocioso X Operador'
+                    text: 'Tempo médio (minutos) ocioso X Operador'
                 }
             }
             },
@@ -77,7 +77,7 @@
         const dataTimeAtend = {
             labels: labelsTimeAtend,
             datasets: [{
-                label: 'Tempo médio',
+                label: 'Tempo médio (minutos)',
                 backgroundColor: 'rgb(0, 54, 65)',
                 borderColor: 'rgb(0, 160, 145)',
                 data: [{{ implode(',', $attendantAverage) }}],
@@ -100,7 +100,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Tempo médio de atendimento X Operador'
+                        text: 'Tempo médio (minutos) de atendimento X Operador'
                     }
                 }
             },
@@ -114,7 +114,7 @@
         const datasFilas = {
             labels: labelsFilas,
             datasets: [{
-                label: 'Tempo médio',
+                label: 'Tempo médio (minutos)',
                 backgroundColor: 'rgb(0, 160, 145)',
                 borderColor: 'rgb(rgb(0, 54, 65))',
                 data: [{{ implode(',', $queueTimeCalls) }}],
@@ -138,7 +138,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Tempo médio em espera X Fila'
+                        text: 'Tempo médio (minutos) em espera X Fila'
                     }
                 }
             },

@@ -87,6 +87,9 @@ class ReportsController extends Controller
                     }
                     $time_conclude = new Carbon($conclude->created_at);
                     $time_call = new Carbon($calls[$key + 1]->created_at);
+                    if ($time_conclude->diffInHours($time_call) > 12) {
+                        break;
+                    }
                     $media += $time_conclude->diffInMinutes($time_call);
                 }
 
