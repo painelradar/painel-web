@@ -20,6 +20,7 @@ class ReportsController extends Controller
     }
     public function generateReport(Request $request)
     {
+
         $datas = $request->all();
         $date_start = DateTime::createFromFormat('Y-m-d', $datas['date_start']);
         $date_end = DateTime::createFromFormat('Y-m-d', $datas['date_end']);
@@ -28,13 +29,7 @@ class ReportsController extends Controller
         $queues = $user->queues;
         $attendants = $user->attendants;
         $i = 0;
-        foreach ($attendants as $attendant) {
-            $i++;
-            $attendant->name = explode(' ', $attendant->name)[0] . ' ' . explode(' ', $attendant->name)[1];
-        }
-
         $ids_attendandts = $attendants->pluck('id');
-
         $services = DB::table('service_reports')->whereDate('created_at', '>=', $date_start)->whereDate('created_at', '<=', $date_end);
         $services = $services->whereIn('attendant_id', $ids_attendandts)->get();
         $prints = PrintReport::whereDate('created_at', '>=', $date_start)->whereDate('created_at', '<=', $date_end);
