@@ -32,7 +32,7 @@ class Queue extends Model
             }
             $integerNumber = $integer;
         }
-        $stringNumber = $this->initial . str_pad($integer, 3, "0", STR_PAD_LEFT);
+        $stringNumber = $this->initial . str_pad($integerNumber, 3, "0", STR_PAD_LEFT);
         Number::create([
             'integerNumber' => $integerNumber,
             'stringNumber' => $stringNumber,
