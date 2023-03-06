@@ -24,7 +24,7 @@ class ClientNumbers extends Component
 
             $number = Number::where('queue_id', $queue->id)
                 ->where('status', 'WAITING')
-                ->where('user_id', Auth::user()->user->id)->first();
+                ->where('user_id', Auth::user()->user_id)->first();
             if (!$number) {
                 return redirect()->back();
             }
@@ -77,13 +77,13 @@ class ClientNumbers extends Component
         $queues = Auth::user()->queues->sortBy('name');
         $absents = Number::whereIn('queue_id', $queues->pluck('id'))
             ->where('status', 'ABSENT')
-            ->where('user_id', Auth::user()->user->id)
+            ->where('user_id', Auth::user()->user_id)
             ->orderBy('id', 'desc')
             ->take(5)->get();
 
         $numbers = Number::whereIn('queue_id', $queues->pluck('id'))
             ->where('status', 'WAITING')
-            ->where('user_id', Auth::user()->user->id)
+            ->where('user_id', Auth::user()->user_id)
             ->orderBy('updated_at', 'asc')->get();
         return view('livewire.client-numbers', compact('queues', 'numbers', 'absents'))->layout('layouts.client-numbers');
     }
