@@ -57,7 +57,8 @@
                             <tr>
                                 <td><button class="btn btn-secondary" wire:click="callNext({{ $queue->id }})">
                                         {{ $queue->name }}
-                                        ({{ $queue->numbers->where('status', 'WAITING')->count() }}
+                                        ({{ $numbers->where('queue_id', $queue->id)->count()
+                                        }}
                                         senhas)
                                     </button></td>
                             </tr>
