@@ -17,27 +17,27 @@
                         <tbody class="text-center">
 
                             @foreach ($numbers as $key => $number)
-                                @if ($key % 2 > 0)
-                                    <tr style="background-color: rgb(216, 216, 216);">
-                                        <td>{{ $number->stringNumber }}</td>
-                                        <td>{{ $number->queue->name }}</td>
-                                        <td>{{ $number->minutesWaiting() }} minutos </td>
-                                        <td><button type="button" class="btn btn-outline-success"
-                                                wire:click="call({{ $number->id }})">Chamar</button>
-                                        </td>
+                            @if ($key % 2 > 0)
+                            <tr style="background-color: rgb(216, 216, 216);">
+                                <td>{{ $number->stringNumber }}</td>
+                                <td>{{ $number->queue->name }}</td>
+                                <td>{{ $number->minutesWaiting() }} minutos </td>
+                                <td><button type="button" class="btn btn-outline-success"
+                                        wire:click="call({{ $number->id }})">Chamar</button>
+                                </td>
 
-                                    </tr>
-                                @else
-                                    <tr>
-                                        <td>{{ $number->stringNumber }}</td>
-                                        <td>{{ $number->queue->name }}</td>
-                                        <td>{{ $number->minutesWaiting() }} minutos </td>
-                                        <td><button type="button" class="btn btn-outline-success"
-                                                wire:click="call({{ $number->id }})">Chamar</button>
-                                        </td>
+                            </tr>
+                            @else
+                            <tr>
+                                <td>{{ $number->stringNumber }}</td>
+                                <td>{{ $number->queue->name }}</td>
+                                <td>{{ $number->minutesWaiting() }} minutos </td>
+                                <td><button type="button" class="btn btn-outline-success"
+                                        wire:click="call({{ $number->id }})">Chamar</button>
+                                </td>
 
-                                    </tr>
-                                @endif
+                            </tr>
+                            @endif
                             @endforeach
 
                         </tbody>
@@ -53,14 +53,14 @@
                 <div class="card-body table-responsive">
                     <table class="table datatable">
                         <tbody class="text-center">
-                            @foreach ($queues as $queues)
-                                <tr>
-                                    <td><button class="btn btn-secondary" wire:click="callNext({{ $queues->id }})">
-                                            {{ $queues->name }}
-                                            ({{ $queues->numbers->where('status', 'WAITING')->count() }}
-                                            senhas)
-                                        </button></td>
-                                </tr>
+                            @foreach ($queues as $queue)
+                            <tr>
+                                <td><button class="btn btn-secondary" wire:click="callNext({{ $queue->id }})">
+                                        {{ $queue->name }}
+                                        ({{ $queue->numbers->where('status', 'WAITING')->count() }}
+                                        senhas)
+                                    </button></td>
+                            </tr>
                             @endforeach
 
                         </tbody>
@@ -75,12 +75,12 @@
                     <table class="table datatable">
                         <tbody class="text-center">
                             @foreach ($absents as $absent)
-                                <tr>
-                                    <td>{{ $absent->stringNumber }}</td>
-                                    <td><button type="button" class="btn btn-outline-success"
-                                            wire:click="call({{ $absent->id }})">Chamar</button>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td>{{ $absent->stringNumber }}</td>
+                                <td><button type="button" class="btn btn-outline-success"
+                                        wire:click="call({{ $absent->id }})">Chamar</button>
+                                </td>
+                            </tr>
                             @endforeach
 
                         </tbody>
